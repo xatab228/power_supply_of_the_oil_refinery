@@ -10,6 +10,7 @@
 #include "QDebug"
 #include "QPainterPath"
 using namespace QXlsx;
+using namespace std;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
