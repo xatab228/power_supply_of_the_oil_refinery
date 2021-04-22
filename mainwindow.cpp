@@ -247,6 +247,7 @@ void MainWindow:: test_xlsx(){
     if (!doc_xslx.load()) {qWarning("Error xlsx file");} else {qWarning("File xlsx is open!!!");}
 
     //qDebug() << doc_xslx.read( row, col ).toDouble();
+    //
 
     AbstractSheet* currentSheet = doc_xslx.sheet(strSheetName);
     int maxRow = -1;
