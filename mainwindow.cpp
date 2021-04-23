@@ -240,14 +240,13 @@ void MainWindow::on_checkBoxShowGrid_clicked(bool checked)
 
 }
 
-void MainWindow:: test_xlsx(){
-    Document doc_xslx(xlsx_base_A);
-    QString strSheetName = "Лист1";
+
+void MainWindow:: test_xlsx(QString xlsx_base,QVector <QVector <double>> *base_test){
+    Document doc_xslx(xlsx_base);
+    QString strSheetName = "Лист1"; // name sheet on xlsx
 
     if (!doc_xslx.load()) {qWarning("Error xlsx file");} else {qWarning("File xlsx is open!!!");}
 
-    //qDebug() << doc_xslx.read( row, col ).toDouble();
-    //
 
     AbstractSheet* currentSheet = doc_xslx.sheet(strSheetName);
     int maxRow = -1;
@@ -256,51 +255,35 @@ void MainWindow:: test_xlsx(){
     Worksheet* wsheet = (Worksheet*) currentSheet->workbook()->activeSheet();
     QVector<CellLocation> clList = wsheet->getFullCells( &maxRow, &maxCol );
 
-    //qDebug() << clList;
-    QVector <QVector <double>> base_a;
-    for (int rc = 0; rc < maxRow; rc++)
+    for (int rc = 1; rc < maxRow+1; rc++)
     {
         QVector<double> tempValue;
-        for (int cc = 0; cc < maxCol; cc++)
+        for (int cc = 1; cc < maxCol+1; cc++)
         {
             tempValue.push_back(doc_xslx.read(rc,cc).toDouble());
         }
-        base_a.push_back(tempValue);
+        base_test->push_back(tempValue);
     }
-
-    for ( int ic = 0; ic < clList.size(); ++ic )
-    {
-        CellLocation cl = clList.at(ic); // cell location
-
-        int row = cl.row - 1;
-        int col = cl.col - 1;
-
-        QSharedPointer<Cell> ptrCell = cl.cell; // cell pointer
-
-        // value of cell
-        QVariant var = cl.cell.data()->value();
-        double doub = var.toDouble();
-
-        base_a[row][col] = doub;
-    }
-
-    /* Display matrix
-
-    for (int rc = 0; rc < maxRow; rc++)
-    {
-        for (int cc = 0; cc < maxCol; cc++)
-        {
-            double doubCell = base_a[rc][cc];
-            qDebug() << "( row : " << rc
-                     << ", col : " << cc
-                     << ") " << doubCell; // display cell value
-        }
-    }
-    */
 
 }
 
 void MainWindow::on_pushButton_clicked()
 {
-    test_xlsx();
+    QVector <QVector <double>> base_test_a;
+    test_xlsx(xlsx_base_A,&base_test_a);
+
+
+    // Display
+    /*
+    for (auto it: base_test_a)
+    {
+        for (auto git: it)
+        {
+            cout << git;
+
+        }
+        cout << endl;
+    }
+    */
+
 }

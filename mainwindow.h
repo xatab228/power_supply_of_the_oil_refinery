@@ -31,12 +31,13 @@ public:
     int a = 0;
     int b = 0;
     int c = 0;
+    //QVector <QVector <double>> base_test;
     QString xlsx_base_A = "E:/Project_all/Project_startup/new_electro_1/base/matrix_a.xlsx";
     QString xlsx_base_E = "E:/Project_all/Project_startup/new_electro_1/base/matrix_e.xlsx";
     QString xlsx_base_Y = "E:/Project_all/Project_startup/new_electro_1/base/matrix_y.xlsx";
     bool keke = false;
     virtual void mousePressEvent(QMouseEvent *event);
-    virtual void test_xlsx();
+    virtual void test_xlsx(QString xlsx_base,QVector <QVector <double>> *base_test);
     virtual void  mouseReleaseEvent(QMouseEvent *event);
 
 private:
