@@ -241,7 +241,7 @@ void MainWindow::on_checkBoxShowGrid_clicked(bool checked)
 }
 
 
-void MainWindow:: test_xlsx(QString xlsx_base,QVector <QVector <double>> *base_test){
+void MainWindow:: xlsx_to_matrix(QString xlsx_base,QVector <QVector <QString>> *base_xlsx){
     Document doc_xslx(xlsx_base);
     QString strSheetName = "Лист1"; // name sheet on xlsx
 
@@ -257,33 +257,39 @@ void MainWindow:: test_xlsx(QString xlsx_base,QVector <QVector <double>> *base_t
 
     for (int rc = 1; rc < maxRow+1; rc++)
     {
-        QVector<double> tempValue;
+        QVector<QString> tempValue;
         for (int cc = 1; cc < maxCol+1; cc++)
         {
-            tempValue.push_back(doc_xslx.read(rc,cc).toDouble());
+            tempValue.push_back(doc_xslx.read(rc,cc).toString());
         }
-        base_test->push_back(tempValue);
+        base_xlsx->push_back(tempValue);
     }
 
 }
 
 void MainWindow::on_pushButton_clicked()
 {
-    QVector <QVector <double>> base_test_a;
-    test_xlsx(xlsx_base_A,&base_test_a);
+    QVector <QVector <QString>> base_a;
+    QVector <QVector <QString>> base_e;
+    QVector <QVector <QString>> base_y;
+    xlsx_to_matrix(xlsx_base_A,&base_a);
+    xlsx_to_matrix(xlsx_base_E,&base_e);
+    xlsx_to_matrix(xlsx_base_Y,&base_y);
 
 
     // Display
-    /*
-    for (auto it: base_test_a)
+
+    for (auto it: base_e)
     {
         for (auto git: it)
         {
-            cout << git;
+            //git = git.toDouble();
+            //cout<<git.toInt();
+            qDebug() << git.toDouble();
 
         }
-        cout << endl;
+        //cout << endl;
     }
-    */
+
 
 }

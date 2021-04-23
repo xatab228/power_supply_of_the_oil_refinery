@@ -37,7 +37,7 @@ public:
     QString xlsx_base_Y = "E:/Project_all/Project_startup/new_electro_1/base/matrix_y.xlsx";
     bool keke = false;
     virtual void mousePressEvent(QMouseEvent *event);
-    virtual void test_xlsx(QString xlsx_base,QVector <QVector <double>> *base_test);
+    virtual void xlsx_to_matrix(QString xlsx_base,QVector <QVector <QString>> *base_xlsx);
     virtual void  mouseReleaseEvent(QMouseEvent *event);
 
 private:
