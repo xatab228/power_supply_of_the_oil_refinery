@@ -46,6 +46,9 @@ public:
     virtual void summ_matrix(QVector <QVector <QString>> first_matrix,QVector <QVector <QString>> second_matrix,QVector <QVector <QString>> *end_matrix);
     virtual void summ_matrix_complex_on_complex(QVector <QVector <QString>> first_matrix,QVector <QVector <QString>> second_matrix,QVector <QVector <QString>> *end_matrix);
     virtual void transponse_matrix(QVector <QVector <QString>> matrix,QVector <QVector <QString>> *end_matrix);
+    virtual void minus_matrix(QVector <QVector <QString>> matrix,QVector <QVector <QString>> *end_matrix);
+    virtual void Y_y(QVector <QVector <QString>> a_matrix,QVector <QVector <QString>> y_matrix,QVector <QVector <QString>> * Y_y_matrix);
+    virtual void J_matrix(QVector <QVector <QString>> a_matrix,QVector <QVector <QString>> y_matrix,QVector <QVector <QString>> e_matrix,QVector <QVector <QString>> * j_matrix);
     virtual void  mouseReleaseEvent(QMouseEvent *event);
 
 private:

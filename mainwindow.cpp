@@ -346,7 +346,7 @@ void MainWindow::multiplication_matrix(QVector <QVector <QString>> first_matrix,
 }
 
 void MainWindow::multiplication_matrix_complex_on_complex(QVector <QVector <QString>> first_matrix,QVector <QVector <QString>> second_matrix,QVector <QVector <QString>> *end_matrix){
-    qDebug() << first_matrix.size()<<second_matrix[0].size();
+    //qDebug() << first_matrix.size()<<second_matrix[0].size();
     QVector <QVector <QString>> pepa;
     pepa.resize(first_matrix.size());
     for (int i = 0; i < first_matrix.size(); ++i)pepa[i].resize(second_matrix[0].size());
@@ -395,11 +395,8 @@ void MainWindow::multiplication_matrix_complex_on_complex(QVector <QVector <QStr
         for (auto git: it)
         {
             tempValue.push_back(git);
-            //qDebug() << git;
-            cout << git.toStdString();
 
         }
-        //cout <<endl;
        end_matrix->push_back(tempValue);
     }
 
@@ -489,6 +486,66 @@ void MainWindow::summ_matrix_complex_on_complex(QVector<QVector<QString> > first
     }
 }
 
+void MainWindow::minus_matrix(QVector <QVector <QString>> matrix,QVector <QVector <QString>> *end_matrix){
+    for (auto it: matrix)
+    {
+        QVector<QString> tempValue;
+        for (auto git: it)
+        {
+            tempValue.push_back(QString::number(git.toDouble() * (-1)));
+
+        }
+       end_matrix->push_back(tempValue);
+    }
+}
+
+void MainWindow::Y_y(QVector <QVector <QString>> a_matrix,QVector <QVector <QString>> y_matrix,QVector <QVector <QString>> * Y_y_matrix){
+    xlsx_to_matrix(xlsx_base_A,&a_matrix);
+    xlsx_to_matrix(xlsx_base_A,&y_matrix);
+    QVector <QVector <QString>> pepa;
+    QVector <QVector <QString>> a_t;
+    multiplication_matrix_complex_on_complex(a_matrix,y_matrix,&pepa);
+    transponse_matrix(a_matrix,&a_t);
+    multiplication_matrix_complex_on_complex(pepa,a_t,&pepa);
+
+    for (auto it: pepa)
+    {
+        QVector<QString> tempValue;
+        for (auto git: it)
+        {
+
+            tempValue.push_back(git);
+
+        }
+       Y_y_matrix->push_back(tempValue);
+    }
+
+}
+
+void MainWindow::J_matrix(QVector <QVector <QString>> a_matrix,QVector <QVector <QString>> y_matrix,QVector <QVector <QString>> e_matrix,QVector <QVector <QString>> * j_matrix){
+    xlsx_to_matrix(xlsx_base_A,&a_matrix);
+    xlsx_to_matrix(xlsx_base_A,&y_matrix);
+    xlsx_to_matrix(xlsx_base_A,&e_matrix);
+    QVector <QVector <QString>> pepa;
+    minus_matrix(a_matrix,&a_matrix);
+    multiplication_matrix(a_matrix,e_matrix,&pepa);
+    multiplication_matrix_complex_on_complex(pepa,y_matrix,&pepa);
+
+    for (auto it: pepa)
+    {
+        QVector<QString> tempValue;
+        for (auto git: it)
+        {
+
+            tempValue.push_back(git);
+
+        }
+       j_matrix->push_back(tempValue);
+    }
+
+}
+
+
 //?? obr matrix
 
 void MainWindow::on_pushButton_clicked()
@@ -496,7 +553,8 @@ void MainWindow::on_pushButton_clicked()
     QVector <QVector <QString>> base_a;
     QVector <QVector <QString>> base_e;
     QVector <QVector <QString>> base_y;
-    QVector <QVector <QString>> matrix_end;
+    QVector <QVector <QString>> y_y;
+    QVector <QVector <QString>> j;
     //QVector <QString> c_v;
     xlsx_to_matrix(xlsx_base_A,&base_a);
     xlsx_to_matrix(xlsx_base_E,&base_e);
@@ -509,11 +567,12 @@ void MainWindow::on_pushButton_clicked()
 
     // TESTS FUNCTION
     // Display_matrix
-
-    print_matrix(base_a);
-    transponse_matrix(base_a,&matrix_end);
-    cout << "////////////////////////////////////////"<<endl;
-    print_matrix(matrix_end);
+    //Y_y(base_a,base_y,&y_y);
+    J_matrix(base_a,base_y,base_e,&j);
+    print_matrix(j);
+    //transponse_matrix(base_a,&matrix_end);
+    //cout << "////////////////////////////////////////"<<endl;
+    //print_matrix(matrix_end);
 
 
     //*/
