@@ -14,6 +14,7 @@
 #include <QFile>
 #include <QString>
 #include "QVector"
+#include <sstream>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -37,7 +38,14 @@ public:
     QString xlsx_base_Y = "E:/Project_all/Project_startup/new_electro_1/base/matrix_y.xlsx";
     bool keke = false;
     virtual void mousePressEvent(QMouseEvent *event);
+    virtual void print_matrix(QVector <QVector <QString>> matrix);
     virtual void xlsx_to_matrix(QString xlsx_base,QVector <QVector <QString>> *base_xlsx);
+    virtual void string_to_complex(QString cc,QVector <QString> *complex_vector);
+    virtual void multiplication_matrix(QVector <QVector <QString>> first_matrix,QVector <QVector <QString>> second_matrix,QVector <QVector <QString>> *end_matrix);
+    virtual void multiplication_matrix_complex_on_complex(QVector <QVector <QString>> first_matrix,QVector <QVector <QString>> second_matrix,QVector <QVector <QString>> *end_matrix);
+    virtual void summ_matrix(QVector <QVector <QString>> first_matrix,QVector <QVector <QString>> second_matrix,QVector <QVector <QString>> *end_matrix);
+    virtual void summ_matrix_complex_on_complex(QVector <QVector <QString>> first_matrix,QVector <QVector <QString>> second_matrix,QVector <QVector <QString>> *end_matrix);
+    virtual void transponse_matrix(QVector <QVector <QString>> matrix,QVector <QVector <QString>> *end_matrix);
     virtual void  mouseReleaseEvent(QMouseEvent *event);
 
 private:
