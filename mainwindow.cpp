@@ -249,13 +249,13 @@ void MainWindow::print_matrix(QVector <QVector <QString>> matrix){
     {
         for (auto git: it)
         {
-            //git = git.toDouble();
-            cout << git.toStdString();
-            //qDebug() << git.toDouble();
+            cout << git.toStdString() << "|";   
 
         }
-        //cout << endl;
+        cout << endl;
     }
+    cout << "Matrix size: " << matrix.size() << " X " << matrix[0].size() << endl;
+    matrix.clear();
 }
 
 void MainWindow::xlsx_to_matrix(QString xlsx_base,QVector <QVector <QString>> *base_xlsx){
@@ -271,7 +271,7 @@ void MainWindow::xlsx_to_matrix(QString xlsx_base,QVector <QVector <QString>> *b
     currentSheet->workbook()->setActiveSheet(0);
     Worksheet* wsheet = (Worksheet*) currentSheet->workbook()->activeSheet();
     QVector<CellLocation> clList = wsheet->getFullCells( &maxRow, &maxCol );
-    //qDebug() << maxRow << maxCol;
+
 
     for (int rc = 1; rc < maxRow+1; rc++)
     {
@@ -313,95 +313,83 @@ void MainWindow::string_to_complex(QString cc,QVector <QString> *complex_vector)
     {
        complex_vector->push_back(QString::number(it));
     }
+    pepa.clear();
 
 }
 
 void MainWindow::multiplication_matrix(QVector <QVector <QString>> first_matrix,QVector <QVector <QString>> second_matrix,QVector <QVector <QString>> *end_matrix){
-    //qDebug() << first_matrix[0].size()<<second_matrix.size();
-    QVector <QVector <double>> pepa;
-    pepa.resize(first_matrix.size());
-    for (int i = 0; i < first_matrix.size(); ++i)pepa[i].resize(second_matrix[0].size());
-    if (first_matrix[0].size()!=second_matrix.size())qWarning("Error size of matrix");
-
-    for (int i = 0;i<first_matrix.size();i++){
-        for (int j = 0;j<second_matrix[0].size();j++){
-            pepa[i][j] = 0;
-            for(int k = 0;k<first_matrix[0].size();k++){
-                pepa[i][j] += first_matrix[i][k].toDouble() * second_matrix[k][j].toDouble();
+    if (first_matrix[0].size()!=second_matrix.size()){qWarning("Error size of matrix");}else{
+        QVector <QVector <double>> pepa;
+        pepa.resize(first_matrix.size());
+        for (int i = 0; i < first_matrix.size(); ++i)pepa[i].resize(second_matrix[0].size());
+        for (int i = 0;i<first_matrix.size();i++){
+            for (int j = 0;j<second_matrix[0].size();j++){
+                pepa[i][j] = 0;
+                for(int k = 0;k<first_matrix[0].size();k++){
+                    pepa[i][j] += first_matrix[i][k].toDouble() * second_matrix[k][j].toDouble();
+                }
             }
         }
-    }
-    for (auto it: pepa)
-    {
-        QVector<QString> tempValue;
-        for (auto git: it)
+        for (auto it: pepa)
         {
-            tempValue.push_back(QString::number(git));
+            QVector<QString> tempValue;
+            for (auto git: it)
+            {
+                tempValue.push_back(QString::number(git));
 
+            }
+            end_matrix->push_back(tempValue);
         }
-        end_matrix->push_back(tempValue);
-    }
+        pepa.clear();
+
+    };
+
+
 
 
 }
 
 void MainWindow::multiplication_matrix_complex_on_complex(QVector <QVector <QString>> first_matrix,QVector <QVector <QString>> second_matrix,QVector <QVector <QString>> *end_matrix){
-    //qDebug() << first_matrix.size()<<second_matrix[0].size();
     QVector <QVector <QString>> pepa;
     pepa.resize(first_matrix.size());
     for (int i = 0; i < first_matrix.size(); ++i)pepa[i].resize(second_matrix[0].size());
-    if (first_matrix[0].size()!=second_matrix.size())qWarning("Error size of matrix");
-
-    for (int i = 0;i<first_matrix.size();i++){
-        for (int j = 0;j<second_matrix[0].size();j++){
-            pepa[i][j] = "0";
-            complex <double> z(0.0,0.0);
-            for(int k = 0;k<first_matrix[0].size();k++){
-                QVector <QString> f_c_v;
-                QVector <QString> s_c_v;
-                //QVector <QString> pepa_str;
-                string_to_complex(first_matrix[i][k],&f_c_v);
-                string_to_complex(second_matrix[k][j],&s_c_v);
-                //string_to_complex(pepa[i][j],&pepa_str);
-                complex <double> z1(f_c_v[0].toDouble(),f_c_v[1].toDouble());
-                complex <double> z2(s_c_v[0].toDouble(),s_c_v[1].toDouble());
-                z += z1 * z2;
-
-
-                /*cout << c_v[0].toDouble() << c_v[1].toDouble();
-                pepa_str[0] = QString::number(pepa_str[0].toDouble() + f_c_v[0].toDouble() * s_c_v[0].toDouble());
-                pepa_str[1] = QString::number(pepa_str[1].toDouble() + f_c_v[1].toDouble() * s_c_v[1].toDouble())+"i";
-                //cout << pepa_str[1].toDouble() + first_matrix[i][k].toDouble() * c_v[1].toDouble();
-                if(pepa_str[1].toDouble() + f_c_v[1].toDouble() * s_c_v[1].toDouble() >= 0){
-                    pepa[i][j] = pepa_str[0] + "+" + pepa_str[1];
-                } else {pepa[i][j] = pepa_str[0] + pepa_str[1];}
+    if (first_matrix[0].size()!=second_matrix.size()){qWarning("Error size of matrix");}else{
+        QVector <QVector <QString>> pepa;
+        pepa.resize(first_matrix.size());
+        for (int i = 0; i < first_matrix.size(); ++i)pepa[i].resize(second_matrix[0].size());
+        for (int i = 0;i<first_matrix.size();i++){
+            for (int j = 0;j<second_matrix[0].size();j++){
+                pepa[i][j] = "0";
+                complex <double> z(0.0,0.0);
+                for(int k = 0;k<first_matrix[0].size();k++){
+                    QVector <QString> f_c_v;
+                    QVector <QString> s_c_v;
+                    string_to_complex(first_matrix[i][k],&f_c_v);
+                    string_to_complex(second_matrix[k][j],&s_c_v);
+                    complex <double> z1(f_c_v[0].toDouble(),f_c_v[1].toDouble());
+                    complex <double> z2(s_c_v[0].toDouble(),s_c_v[1].toDouble());
+                    z += z1 * z2;
+                }
+                if( z.imag() >= 0){
+                    pepa[i][j]=QString::number(z.real()) + "+" + QString::number(z.imag())+"i";
+                } else {pepa[i][j]=QString::number(z.real()) + QString::number(z.imag())+"i";}
                 if (pepa[i][j]=="0+0i")pepa[i][j]="0";
-                //cout << pepa[i][j].toStdString();
-                */
 
             }
-            if( z.imag() >= 0){
-                pepa[i][j]=QString::number(z.real()) + "+" + QString::number(z.imag())+"i";
-            } else {pepa[i][j]=QString::number(z.real()) + QString::number(z.imag())+"i";}
-            if (pepa[i][j]=="0+0i")pepa[i][j]="0";
-
         }
-        //cout<<endl;
-    }
 
-    for (auto it: pepa)
-    {
-        QVector<QString> tempValue;
-        for (auto git: it)
+        for (auto it: pepa)
         {
-            tempValue.push_back(git);
+            QVector<QString> tempValue;
+            for (auto git: it)
+            {
+                tempValue.push_back(git);
 
+            }
+           end_matrix->push_back(tempValue);
         }
-       end_matrix->push_back(tempValue);
+        pepa.clear();
     }
-
-
-
 }
 
 void MainWindow::transponse_matrix(QVector <QVector <QString>> matrix,QVector <QVector <QString>> *end_matrix){
@@ -424,66 +412,74 @@ void MainWindow::transponse_matrix(QVector <QVector <QString>> matrix,QVector <Q
         }
        end_matrix->push_back(tempValue);
     }
+    pepa.clear();
 
 }
 
 void MainWindow::summ_matrix(QVector <QVector <QString>> first_matrix,QVector <QVector <QString>> second_matrix,QVector <QVector <QString>> *end_matrix){
-    if (first_matrix.size()!=second_matrix.size() || first_matrix[0].size()!=second_matrix[0].size() )qWarning("Error size of matrix");
-    QVector <QVector <QString>> pepa;
-    pepa.resize(first_matrix.size());
-    for (int i = 0; i < first_matrix.size(); ++i)pepa[i].resize(first_matrix[0].size());
+    if (first_matrix.size()!=second_matrix.size() || first_matrix[0].size()!=second_matrix[0].size() ){qWarning("Error size of matrix");} else {
+        QVector <QVector <QString>> pepa;
+        pepa.resize(first_matrix.size());
+        for (int i = 0; i < first_matrix.size(); ++i)pepa[i].resize(first_matrix[0].size());
 
-    for(int i = 0;i < first_matrix.size();++i){
-        for(int j = 0;j < first_matrix[0].size();++j){
-            pepa[i][j] = QString::number(first_matrix[i][j].toDouble() + second_matrix[i][j].toDouble());
+        for(int i = 0;i < first_matrix.size();++i){
+            for(int j = 0;j < first_matrix[0].size();++j){
+                pepa[i][j] = QString::number(first_matrix[i][j].toDouble() + second_matrix[i][j].toDouble());
+            }
+
         }
-
-    }
-    for (auto it: pepa)
-    {
-        QVector<QString> tempValue;
-        for (auto git: it)
+        for (auto it: pepa)
         {
-            tempValue.push_back(git);
+            QVector<QString> tempValue;
+            for (auto git: it)
+            {
+                tempValue.push_back(git);
 
+            }
+           end_matrix->push_back(tempValue);
         }
-       end_matrix->push_back(tempValue);
+        pepa.clear();
     }
+
 }
 
 void MainWindow::summ_matrix_complex_on_complex(QVector<QVector<QString> > first_matrix, QVector<QVector<QString> > second_matrix, QVector<QVector<QString> > *end_matrix){
-    if (first_matrix.size()!=second_matrix.size() || first_matrix[0].size()!=second_matrix[0].size() )qWarning("Error size of matrix");
-    QVector <QVector <QString>> pepa;
-    pepa.resize(first_matrix.size());
-    for (int i = 0; i < first_matrix.size(); ++i)pepa[i].resize(first_matrix[0].size());
+    if (first_matrix.size()!=second_matrix.size() || first_matrix[0].size()!=second_matrix[0].size() ){qWarning("Error size of matrix");} else{
+        QVector <QVector <QString>> pepa;
+        pepa.resize(first_matrix.size());
+        for (int i = 0; i < first_matrix.size(); ++i)pepa[i].resize(first_matrix[0].size());
 
-    for(int i = 0;i < first_matrix.size();++i){
-        for(int j = 0;j < first_matrix[0].size();++j){
-            QVector <QString> f_c_v;
-            QVector <QString> s_c_v;
-            string_to_complex(first_matrix[i][j],&f_c_v);
-            string_to_complex(second_matrix[i][j],&s_c_v);
-            complex <double> z1(f_c_v[0].toDouble(),f_c_v[1].toDouble());
-            complex <double> z2(s_c_v[0].toDouble(),s_c_v[1].toDouble());
-            complex <double> z(0.0,0.0);
-            z = z1 + z2;
-            if( z.imag() >= 0){
-                pepa[i][j]=QString::number(z.real()) + "+" + QString::number(z.imag())+"i";
-            } else {pepa[i][j]=QString::number(z.real()) + QString::number(z.imag())+"i";}
-            if (pepa[i][j]=="0+0i")pepa[i][j]="0";
+        for(int i = 0;i < first_matrix.size();++i){
+            for(int j = 0;j < first_matrix[0].size();++j){
+                QVector <QString> f_c_v;
+                QVector <QString> s_c_v;
+                string_to_complex(first_matrix[i][j],&f_c_v);
+                string_to_complex(second_matrix[i][j],&s_c_v);
+                complex <double> z1(f_c_v[0].toDouble(),f_c_v[1].toDouble());
+                complex <double> z2(s_c_v[0].toDouble(),s_c_v[1].toDouble());
+                complex <double> z(0.0,0.0);
+                z = z1 + z2;
+                if( z.imag() >= 0){
+                    pepa[i][j]=QString::number(z.real()) + "+" + QString::number(z.imag())+"i";
+                } else {pepa[i][j]=QString::number(z.real()) + QString::number(z.imag())+"i";}
+                if (pepa[i][j]=="0+0i")pepa[i][j]="0";
+            }
+
         }
-
-    }
-    for (auto it: pepa)
-    {
-        QVector<QString> tempValue;
-        for (auto git: it)
+        for (auto it: pepa)
         {
-            tempValue.push_back(git);
+            QVector<QString> tempValue;
+            for (auto git: it)
+            {
+                tempValue.push_back(git);
 
+            }
+           end_matrix->push_back(tempValue);
         }
-       end_matrix->push_back(tempValue);
+        pepa.clear();
+
     }
+
 }
 
 void MainWindow::minus_matrix(QVector <QVector <QString>> matrix,QVector <QVector <QString>> *end_matrix){
@@ -497,16 +493,16 @@ void MainWindow::minus_matrix(QVector <QVector <QString>> matrix,QVector <QVecto
         }
        end_matrix->push_back(tempValue);
     }
+    matrix.clear();
 }
 
 void MainWindow::Y_y(QVector <QVector <QString>> a_matrix,QVector <QVector <QString>> y_matrix,QVector <QVector <QString>> * Y_y_matrix){
-    xlsx_to_matrix(xlsx_base_A,&a_matrix);
-    xlsx_to_matrix(xlsx_base_A,&y_matrix);
     QVector <QVector <QString>> pepa;
+    QVector <QVector <QString>> pepa_two;
     QVector <QVector <QString>> a_t;
-    multiplication_matrix_complex_on_complex(a_matrix,y_matrix,&pepa);
+    multiplication_matrix_complex_on_complex(a_matrix,y_matrix,&pepa_two);
     transponse_matrix(a_matrix,&a_t);
-    multiplication_matrix_complex_on_complex(pepa,a_t,&pepa);
+    multiplication_matrix_complex_on_complex(pepa_two,a_t,&pepa);
 
     for (auto it: pepa)
     {
@@ -519,17 +515,17 @@ void MainWindow::Y_y(QVector <QVector <QString>> a_matrix,QVector <QVector <QStr
         }
        Y_y_matrix->push_back(tempValue);
     }
+    pepa.clear();
 
 }
 
 void MainWindow::J_matrix(QVector <QVector <QString>> a_matrix,QVector <QVector <QString>> y_matrix,QVector <QVector <QString>> e_matrix,QVector <QVector <QString>> * j_matrix){
-    xlsx_to_matrix(xlsx_base_A,&a_matrix);
-    xlsx_to_matrix(xlsx_base_A,&y_matrix);
-    xlsx_to_matrix(xlsx_base_A,&e_matrix);
     QVector <QVector <QString>> pepa;
-    minus_matrix(a_matrix,&a_matrix);
-    multiplication_matrix(a_matrix,e_matrix,&pepa);
-    multiplication_matrix_complex_on_complex(pepa,y_matrix,&pepa);
+    QVector <QVector <QString>> a_m;
+    QVector <QVector <QString>> pepa_two;
+    minus_matrix(a_matrix,&a_m);
+    multiplication_matrix_complex_on_complex(a_m,y_matrix,&pepa_two);
+    multiplication_matrix_complex_on_complex(pepa_two,e_matrix,&pepa);
 
     for (auto it: pepa)
     {
@@ -542,7 +538,7 @@ void MainWindow::J_matrix(QVector <QVector <QString>> a_matrix,QVector <QVector 
         }
        j_matrix->push_back(tempValue);
     }
-
+    pepa.clear();
 }
 
 
@@ -555,7 +551,6 @@ void MainWindow::on_pushButton_clicked()
     QVector <QVector <QString>> base_y;
     QVector <QVector <QString>> y_y;
     QVector <QVector <QString>> j;
-    //QVector <QString> c_v;
     xlsx_to_matrix(xlsx_base_A,&base_a);
     xlsx_to_matrix(xlsx_base_E,&base_e);
     xlsx_to_matrix(xlsx_base_Y,&base_y);
@@ -567,9 +562,9 @@ void MainWindow::on_pushButton_clicked()
 
     // TESTS FUNCTION
     // Display_matrix
-    //Y_y(base_a,base_y,&y_y);
-    J_matrix(base_a,base_y,base_e,&j);
-    print_matrix(j);
+    Y_y(base_a,base_y,&y_y);
+    //J_matrix(base_a,base_y,base_e,&j);
+    print_matrix(y_y);
     //transponse_matrix(base_a,&matrix_end);
     //cout << "////////////////////////////////////////"<<endl;
     //print_matrix(matrix_end);
