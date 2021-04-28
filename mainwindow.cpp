@@ -606,6 +606,8 @@ void MainWindow::slau(QVector <QVector <QString>> matrix,QVector <QString> sv_ch
     }
     pepa.clear();
 
+    // XZ Voobshe
+
 
 }
 
@@ -650,6 +652,7 @@ void MainWindow::obr_matrix(QVector <QVector <QString>> matrix,QVector <QVector 
        end_matrix->push_back(tempValue);
     }
     pepa.clear();
+    // XZ Voobshe
 
 }
 
@@ -705,11 +708,11 @@ void MainWindow::U_y(QVector <QVector <QString>> first_matrix,QVector <QVector <
     QVector <QVector <QString>> pepa_two;
     obr_matrix(first_matrix,&obr_y);
     print_matrix(obr_y);
+    // Dont work
 }
 
 
 void MainWindow::I_matrix(QVector <QVector <QString>> y_matrix,QVector <QVector <QString>> a_matrix,QVector <QVector <QString>> e_matrix,QVector <QVector <QString>> u_matrix,QVector <QVector <QString>> *i_matrix){
-    // I = Y * (Aт * Uy + E)
     QVector <QVector <QString>> pepa;
     QVector <QVector <QString>> pepa_two;
     QVector <QVector <QString>> a_t;
