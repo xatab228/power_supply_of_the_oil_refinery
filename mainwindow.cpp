@@ -496,6 +496,160 @@ void MainWindow::minus_matrix(QVector <QVector <QString>> matrix,QVector <QVecto
     matrix.clear();
 }
 
+void MainWindow::slau(QVector <QVector <QString>> matrix,QVector <QString> sv_chlen,QVector <QString> *end_matrix){
+    QVector <QString> pepa;
+    QVector <QString> x_n;
+    pepa.resize(matrix.size());
+    x_n.resize(matrix.size());
+    QString eps_c = "0.001";
+    QVector <QString> c_eps;
+    string_to_complex(eps_c,&c_eps);
+    complex <double> eps (c_eps[0].toDouble(),c_eps[1].toDouble());
+
+    for (int i = 0; i < matrix.size(); i++)
+    {
+        QVector <QString> f_c_v;
+        QVector <QString> s_c_v;
+        string_to_complex(sv_chlen[i],&f_c_v);
+        string_to_complex(matrix[i][i],&s_c_v);
+        complex <double> z1(f_c_v[0].toDouble(),f_c_v[1].toDouble());
+        complex <double> z2(s_c_v[0].toDouble(),s_c_v[1].toDouble());
+        complex <double> z(0.0,0.0);
+        z = z1 / z2;
+        if( z.imag() >= 0){
+            pepa[i]=QString::number(z.real()) + "+" + QString::number(z.imag())+"i";
+        } else {pepa[i]=QString::number(z.real()) + QString::number(z.imag())+"i";}
+        if (pepa[i]=="0+0i")pepa[i]="0";
+    }
+
+
+
+    do {
+        for (int i = 0; i < matrix.size(); i++) {
+            QVector <QString> fr_c_v;
+            QVector <QString> sr_c_v;
+            string_to_complex(sv_chlen[i],&fr_c_v);
+            string_to_complex(matrix[i][i],&sr_c_v);
+            complex <double> z1(fr_c_v[0].toDouble(),fr_c_v[1].toDouble());
+            complex <double> z2(sr_c_v[0].toDouble(),sr_c_v[1].toDouble());
+            complex <double> z(0.0,0.0);
+            z = z1 / z2;
+            if( z.imag() >= 0){
+                x_n[i]=QString::number(z.real()) + "+" + QString::number(z.imag())+"i";
+            } else {x_n[i]=QString::number(z.real()) + QString::number(z.imag())+"i";}
+            if (x_n[i]=="0+0i")x_n[i]="0";
+
+            for (int j = 0; j < matrix.size(); j++) {
+                if (i == j)
+                    continue;
+                else {
+                    QVector <QString> t_c_v;
+                    QVector <QString> fi_c_v;
+                    QVector <QString> si_c_v;
+                    QVector <QString> b_c_v;
+
+                    string_to_complex(matrix[i][j],&t_c_v);
+                    string_to_complex(matrix[i][i],&b_c_v);
+                    string_to_complex(pepa[i],&fi_c_v);
+                    string_to_complex(x_n[i],&si_c_v);
+                    complex <double> z1(t_c_v[0].toDouble(),t_c_v[1].toDouble());
+                    complex <double> z2(b_c_v[0].toDouble(),b_c_v[1].toDouble());
+                    complex <double> z3(fi_c_v[0].toDouble(),fi_c_v[1].toDouble());
+                    complex <double> z(si_c_v[0].toDouble(),si_c_v[1].toDouble());
+                    z -= z1 / z2 * z3;
+                    if( z.imag() >= 0){
+                        x_n[i]=QString::number(z.real()) + "+" + QString::number(z.imag())+"i";
+                    } else {x_n[i]=QString::number(z.real()) + QString::number(z.imag())+"i";}
+                    if (x_n[i]=="0+0i")x_n[i]="0";
+                }
+            }
+        }
+
+
+        bool flag = true;
+        for (int i = 0; i < matrix.size() - 1; i++) {
+            QVector <QString> lol_c_v;
+            QVector <QString> kol_c_v;
+            string_to_complex(x_n[i],&lol_c_v);
+            string_to_complex(pepa[i],&kol_c_v);
+            complex <double> z1(lol_c_v[0].toDouble(),lol_c_v[1].toDouble());
+            complex <double> z2(kol_c_v[0].toDouble(),kol_c_v[1].toDouble());
+            complex <double> z(0.0,0.0);
+            z = z1 - z2;
+            double re = z.real();
+            double im = z.imag();
+            if (z.real()<0)re = z.real()*(-1);
+            if (z.imag()<0)im = z.imag()*(-1);
+            z = complex <double> (re,im); // abs
+
+
+            if (z.real() > eps.real() && z.imag() > eps.imag()) {
+                flag = false;
+                break;
+            }
+        }
+
+        for (int i = 0; i < matrix.size(); i++) {
+            pepa[i] = x_n[i];
+        }
+
+        if (flag)
+            break;
+    } while (1);
+
+    for (auto it: pepa)
+    {
+       end_matrix->push_back(it);
+    }
+    pepa.clear();
+
+
+}
+
+void MainWindow::obr_matrix(QVector <QVector <QString>> matrix,QVector <QVector <QString>> *end_matrix){
+    QVector <QVector <QString>> pepa;
+    QVector <QString> y;
+    QVector <QString> itr;
+    y.resize(matrix.size());
+    pepa.resize(matrix.size());
+    for (int i = 0; i < matrix.size(); ++i)pepa[i].resize(matrix[0].size());
+    //int i, j, k;
+
+
+    for (int i = 0; i < matrix.size(); i++)
+    {
+        for (int j = 0; j < matrix.size(); j++)
+        {
+            if (i == j)
+            {
+                y[j] = QString::number(1);
+            }
+            else
+            {
+                y[j] = QString::number(0);
+            }
+        }
+        slau(matrix, y, &itr);
+        for (int k = 0; k < matrix.size(); k++)
+        {
+            pepa[k][i] = itr[k];
+        }
+    }
+
+    for (auto it: pepa)
+    {
+        QVector<QString> tempValue;
+        for (auto git: it)
+        {
+            tempValue.push_back(git);
+
+        }
+       end_matrix->push_back(tempValue);
+    }
+    pepa.clear();
+
+}
+
 void MainWindow::Y_y(QVector <QVector <QString>> a_matrix,QVector <QVector <QString>> y_matrix,QVector <QVector <QString>> * Y_y_matrix){
     QVector <QVector <QString>> pepa;
     QVector <QVector <QString>> pepa_two;
@@ -541,6 +695,13 @@ void MainWindow::J_matrix(QVector <QVector <QString>> a_matrix,QVector <QVector 
     pepa.clear();
 }
 
+void MainWindow::U_y(QVector <QVector <QString>> first_matrix,QVector <QVector <QString>> second_matrix,QVector <QVector <QString>> * U_y){
+    QVector <QVector <QString>> pepa;
+    QVector <QVector <QString>> obr_y;
+    QVector <QVector <QString>> pepa_two;
+    obr_matrix(first_matrix,&obr_y);
+    print_matrix(obr_y);
+}
 
 //?? obr matrix
 
@@ -551,6 +712,7 @@ void MainWindow::on_pushButton_clicked()
     QVector <QVector <QString>> base_y;
     QVector <QVector <QString>> y_y;
     QVector <QVector <QString>> j;
+    QVector <QVector <QString>> u_y;
     xlsx_to_matrix(xlsx_base_A,&base_a);
     xlsx_to_matrix(xlsx_base_E,&base_e);
     xlsx_to_matrix(xlsx_base_Y,&base_y);
@@ -563,7 +725,8 @@ void MainWindow::on_pushButton_clicked()
     // TESTS FUNCTION
     // Display_matrix
     Y_y(base_a,base_y,&y_y);
-    //J_matrix(base_a,base_y,base_e,&j);
+    J_matrix(base_a,base_y,base_e,&j);
+    //U_y(base_y,j,&u_y);
     print_matrix(y_y);
     //transponse_matrix(base_a,&matrix_end);
     //cout << "////////////////////////////////////////"<<endl;

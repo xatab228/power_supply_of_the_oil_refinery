@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/base">
+        <file>base/matrix_a.xlsx</file>
+        <file>base/matrix_e.xlsx</file>
+        <file>base/matrix_y.xlsx</file>
+    </qresource>
+</RCC>

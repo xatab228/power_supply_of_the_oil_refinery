@@ -39,4 +39,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 DISTFILES +=
 
 RESOURCES += \
+    base.qrc \
     images.qrc
