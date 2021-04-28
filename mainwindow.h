@@ -37,6 +37,8 @@ public:
     QString xlsx_base_A = ":/base/base/matrix_a.xlsx";
     QString xlsx_base_E = ":/base/base/matrix_e.xlsx";
     QString xlsx_base_Y = ":/base/base/matrix_y.xlsx";
+    QString xlsx_base_U = ":/base/base/matrix_u.xlsx"; // temporarily
+    QString xlsx_base_I = ":/base/base/matrix_i.xlsx"; // temporarily
     bool keke = false;
     virtual void mousePressEvent(QMouseEvent *event);
     virtual void print_matrix(QVector <QVector <QString>> matrix);
@@ -53,6 +55,7 @@ public:
     virtual void obr_matrix(QVector <QVector <QString>> matrix,QVector <QVector <QString>> *end_matrix);
     virtual void J_matrix(QVector <QVector <QString>> a_matrix,QVector <QVector <QString>> y_matrix,QVector <QVector <QString>> e_matrix,QVector <QVector <QString>> * j_matrix);
     virtual void U_y(QVector <QVector <QString>> first_matrix,QVector <QVector <QString>> second_matrix,QVector <QVector <QString>> * U_y);
+    virtual void I_matrix(QVector <QVector <QString>> y_matrix,QVector <QVector <QString>> a_matrix,QVector <QVector <QString>> e_matrix,QVector <QVector <QString>> u_matrix,QVector <QVector <QString>> * i_matrix);
     virtual void mouseReleaseEvent(QMouseEvent *event);
 
 private:

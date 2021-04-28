@@ -305,9 +305,11 @@ void MainWindow::string_to_complex(QString cc,QVector <QString> *complex_vector)
     }
     if (c!="")pepa[0] = atof(c.c_str());
 
-    if (str.find('-') == 0)pepa[0]=pepa[0]*(-1);//xz
-    if (str.find('-',1) > 0)pepa[1]=pepa[1]*(-1);
-    if (str.find('-') == 0 && pepa[0]==0.0)pepa[1]=pepa[1]*(-1);
+    if (str.find('-') == 0 && pepa[0]!=0.0)pepa[0]=pepa[0]*(-1);
+    if (str.find('-') == 0 && pepa[0]==0.0)pepa[1]=pepa[1]*(-1);//xz
+    if (str.find('-',1) != -1 && str.find('-',1) == str.find('-'))pepa[1]=pepa[1]*(-1);
+    if (str.find('-') == 0 && str.find('-',1) != -1)pepa[1]=pepa[1]*(-1);
+
 
     for (auto it: pepa)
     {
@@ -459,6 +461,7 @@ void MainWindow::summ_matrix_complex_on_complex(QVector<QVector<QString> > first
                 complex <double> z2(s_c_v[0].toDouble(),s_c_v[1].toDouble());
                 complex <double> z(0.0,0.0);
                 z = z1 + z2;
+                //cout<<z.real() << " "<< z.imag() <<" = " <<z1.imag()<<" + " <<z2.imag()<< endl;
                 if( z.imag() >= 0){
                     pepa[i][j]=QString::number(z.real()) + "+" + QString::number(z.imag())+"i";
                 } else {pepa[i][j]=QString::number(z.real()) + QString::number(z.imag())+"i";}
@@ -654,6 +657,7 @@ void MainWindow::Y_y(QVector <QVector <QString>> a_matrix,QVector <QVector <QStr
     QVector <QVector <QString>> pepa;
     QVector <QVector <QString>> pepa_two;
     QVector <QVector <QString>> a_t;
+    QVector <QString> chek;
     multiplication_matrix_complex_on_complex(a_matrix,y_matrix,&pepa_two);
     transponse_matrix(a_matrix,&a_t);
     multiplication_matrix_complex_on_complex(pepa_two,a_t,&pepa);
@@ -703,6 +707,33 @@ void MainWindow::U_y(QVector <QVector <QString>> first_matrix,QVector <QVector <
     print_matrix(obr_y);
 }
 
+
+void MainWindow::I_matrix(QVector <QVector <QString>> y_matrix,QVector <QVector <QString>> a_matrix,QVector <QVector <QString>> e_matrix,QVector <QVector <QString>> u_matrix,QVector <QVector <QString>> *i_matrix){
+    // I = Y * (Aт * Uy + E)
+    QVector <QVector <QString>> pepa;
+    QVector <QVector <QString>> pepa_two;
+    QVector <QVector <QString>> a_t;
+    QVector <QVector <QString>> i_matr;
+    QVector <QString> chek;
+    transponse_matrix(a_matrix,&a_t);
+    multiplication_matrix_complex_on_complex(a_t,u_matrix,&pepa_two);
+    summ_matrix_complex_on_complex(pepa_two,e_matrix,&pepa);
+    multiplication_matrix_complex_on_complex(y_matrix,pepa,&i_matr);
+
+    for (auto it: i_matr)
+    {
+        QVector<QString> tempValue;
+        for (auto git: it)
+        {
+
+            tempValue.push_back(git);
+
+        }
+       i_matrix->push_back(tempValue);
+    }
+    pepa.clear();
+
+}
 //?? obr matrix
 
 void MainWindow::on_pushButton_clicked()
@@ -713,9 +744,13 @@ void MainWindow::on_pushButton_clicked()
     QVector <QVector <QString>> y_y;
     QVector <QVector <QString>> j;
     QVector <QVector <QString>> u_y;
+    QVector <QVector <QString>> i_m;
+    QVector <QVector <QString>> i_m_test;
     xlsx_to_matrix(xlsx_base_A,&base_a);
     xlsx_to_matrix(xlsx_base_E,&base_e);
     xlsx_to_matrix(xlsx_base_Y,&base_y);
+    xlsx_to_matrix(xlsx_base_U,&u_y);
+    xlsx_to_matrix(xlsx_base_I,&i_m_test);
     //multiplication_matrix_complex_on_complex(base_a,base_y,&matrix_end);
     //transponse_matrix(base_a,&matrix_end);
     //string_to_complex("-5-0.1i",&c_v);
@@ -724,10 +759,12 @@ void MainWindow::on_pushButton_clicked()
 
     // TESTS FUNCTION
     // Display_matrix
-    Y_y(base_a,base_y,&y_y);
-    J_matrix(base_a,base_y,base_e,&j);
+    //Y_y(base_a,base_y,&y_y); // --true
+    //J_matrix(base_a,base_y,base_e,&j); // --true
     //U_y(base_y,j,&u_y);
-    print_matrix(y_y);
+    I_matrix(base_y,base_a,base_e,u_y,&i_m);
+    print_matrix(i_m);
+    print_matrix(i_m_test);
     //transponse_matrix(base_a,&matrix_end);
     //cout << "////////////////////////////////////////"<<endl;
     //print_matrix(matrix_end);

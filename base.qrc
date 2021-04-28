@@ -3,5 +3,7 @@
         <file>base/matrix_a.xlsx</file>
         <file>base/matrix_e.xlsx</file>
         <file>base/matrix_y.xlsx</file>
+        <file>base/matrix_u.xlsx</file>
+        <file>base/matrix_i.xlsx</file>
     </qresource>
 </RCC>
