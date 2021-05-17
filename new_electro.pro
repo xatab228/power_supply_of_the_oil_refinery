@@ -22,14 +22,32 @@ QXLSX_SOURCEPATH=./source/  # current QXlsx source path is ./source/
 include(./QXlsx.pri)
 
 SOURCES += \
+    fizika.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    matematika.cpp \
+    menu.cpp \
+    odnolineynaya_skhema.cpp \
+    primenenie.cpp \
+    vhod.cpp
 
 HEADERS += \
-    mainwindow.h
+    fizika.h \
+    mainwindow.h \
+    matematika.h \
+    menu.h \
+    odnolineynaya_skhema.h \
+    primenenie.h \
+    vhod.h
 
 FORMS += \
-    mainwindow.ui
+    fizika.ui \
+    mainwindow.ui \
+    matematika.ui \
+    menu.ui \
+    odnolineynaya_skhema.ui \
+    primenenie.ui \
+    vhod.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

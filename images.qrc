@@ -2,5 +2,13 @@
     <qresource prefix="/images">
         <file>qt1.png</file>
         <file>qt2.png</file>
+        <file>account.png</file>
+        <file>back.png</file>
+        <file>exit.png</file>
+        <file>info.png</file>
+        <file>fon.png</file>
+        <file>icon.jpg</file>
+        <file>123.png</file>
+        <file>Odnolineynaya_skhema_fragement_2.jpg</file>
     </qresource>
 </RCC>
